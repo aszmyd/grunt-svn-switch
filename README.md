@@ -37,50 +37,57 @@ grunt.initConfig({
 
 ### Options
 
-#### options.separator
+#### options.repository
 Type: `String`
-Default value: `',  '`
+Default value: `null`
 
-A string value that is used to do something with whatever.
+[Required] The URL of the SVN repository.
 
-#### options.punctuation
+#### options.username
 Type: `String`
-Default value: `'.'`
+Default value: `null`
 
-A string value that is used to do something else with whatever else.
+SVN username to use in Authentication process.
+
+#### options.password
+Type: `String`
+Default value: `null`
+
+SVN password to use in Authentication process.
+
+
+#### options.bin
+Type: `String`
+Default value: `'svn'`
+
+Specifies the location of the SVN binary.
+
+#### options.execOptions
+Type: `Object`
+Default value: `'{}'`
+
+Specifies any options to pass to the exec command when executing the svn cli statements. For example, it may be necessary to increase the default maxBuffer for larger repositories.
 
 ### Usage Examples
 
-#### Default Options
-In this example, the default options are used to do something with whatever. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result would be `Testing, 1 2 3.`
-
-```js
-grunt.initConfig({
-  svn_switch: {
-    options: {},
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
-    },
-  },
-});
-```
-
-#### Custom Options
-In this example, custom options are used to do something else with whatever else. So if the `testing` file has the content `Testing` and the `123` file had the content `1 2 3`, the generated result in this case would be `Testing: 1 2 3 !!!`
+You need to specify `svn_target` command line option when invoking task. The `svn_target` option is a target, related to `repository` option URL, that specifies to which bramch/tag or trunk switch to.
 
 ```js
 grunt.initConfig({
   svn_switch: {
     options: {
-      separator: ': ',
-      punctuation: ' !!!',
+      repository:  'http://somedomain.com/svn/myproject/',
+      username:    'my_username',
+      password:    'my_password'
     },
-    files: {
-      'dest/default_options': ['src/testing', 'src/123'],
+    default: {
     },
   },
 });
 ```
+
+How to use: `grunt svn_switch --target=branches/mybranch` or `grunt svn_switch --target=trunk` etc.
+
 
 ## Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using [Grunt](http://gruntjs.com/).
