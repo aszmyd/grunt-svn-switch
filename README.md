@@ -86,7 +86,7 @@ grunt.initConfig({
 });
 ```
 
-How to use: `grunt svn_switch --target=branches/mybranch` or `grunt svn_switch --target=trunk` etc.
+How to use: `grunt svn_switch --svn_target=branches/mybranch` or `grunt svn_switch --svn_target=trunk` etc.
 
 
 ## Contributing
