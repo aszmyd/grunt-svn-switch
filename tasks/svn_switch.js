@@ -15,13 +15,16 @@ module.exports = function(grunt) {
 
       grunt.registerMultiTask('svn_switch', 'Grunt SVN switching support', function () {
 
-          var exec = require('child_process').exec;
+          var spawn = require('child_process').spawn;
+
           var options = this.options({
               bin:         'svn',
               repository:  null,
               username:    null,
               password:    null,
-              execOptions: {}
+              execOptions: {
+                  stdio: 'inherit'
+              }
           });
 
           var target = grunt.option('svn_target');
@@ -46,30 +49,29 @@ module.exports = function(grunt) {
           var done = this.async();
 
           var commandArgs = [
-              options.bin,
               'switch'
           ];
 
           if(options.username !== null) {
-              commandArgs.push('--username ' + options.username);
+              commandArgs.push('--username');
+              commandArgs.push(options.username);
           }
 
           if(options.password !== null) {
-              commandArgs.push('--password ' + options.password);
+              commandArgs.push('--password');
+              commandArgs.push(options.password);
           }
 
           commandArgs.push(options.repository + target);
 
-          var command = commandArgs.join(' ');
-
           grunt.log.writeln('Switching to ' + target);
-          exec(command, options.execOptions, function (error, stdout) {
-              grunt.log.write(stdout);
-              if (error !== null) {
-                  grunt.log.error(error);
-                  done(false);
-              } else {
+          var svn_switch = spawn(options.bin, commandArgs, options.execOptions);
+
+          svn_switch.on('close', function (code) {
+              if(code === 0) {
                   done(true);
+              } else {
+                  done(false);
               }
           });
 
